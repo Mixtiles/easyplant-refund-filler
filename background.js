@@ -2,9 +2,7 @@
 
 const EASYPLANT_SHOPIFY_STORE_NAME = 'mt-ep'
 const EASYPLANT_SHOPIFY_TAGS_CSV_ID = '1bJj8catep_ga2I0sRLGbMIJlPDHxkXCd'
-
 const EASYPLANT_SHOPIFY_TAGS_CSV_ADDRESS = `https://drive.google.com/uc?export=download&id=${EASYPLANT_SHOPIFY_TAGS_CSV_ID}`
-
 const SHOPIFY_REFUND_REGEX_MATCHER = new RegExp(
     `https?:\/\/${EASYPLANT_SHOPIFY_STORE_NAME}\.myshopify\.com\/admin\/orders\/.*\/refund`
 )
@@ -119,17 +117,6 @@ function getEasyplantShopifyTags () {
             allTags.shift() // Remove the "Tag" Headline from the CSV
             return allTags.join('\n')
         })
-}
-
-function addItem (item) {
-    if (itemString) {
-        itemString += '\n'
-        itemString += item
-    } else {
-        itemString = item
-    }
-
-    browser.storage.local.set({ [OPTION_ITEMS_KEY]: itemString })
 }
 
 function sendOptions (tabId, frameId) {
