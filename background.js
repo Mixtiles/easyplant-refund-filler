@@ -10,14 +10,12 @@ const SHOPIFY_REFUND_REGEX_MATCHER = new RegExp(
 const OPTION_AUTOCOMPLETE_KEY = 'autocompleteEnabled'
 const OPTION_ITEMS_KEY = 'items'
 const OPTION_MATCH_ONLY_AT_BEGINNING = 'matchOnlyAtBeginning'
-const OPTION_MINIMUM_CHARACTER_COUNT_KEY = 'minimumCharacterCount'
 const OPTION_USE_TAB_KEY = 'useTabToChooseItems'
 
 let autocompleteEnabled
 let itemString
 let matchOnlyAtBeginning
-let minimumCharacterCount
-let syncItems
+
 let useTabToChooseItems
 
 updateShopifyTags().then(() => {
@@ -25,7 +23,6 @@ updateShopifyTags().then(() => {
         .get([
             OPTION_AUTOCOMPLETE_KEY,
             OPTION_MATCH_ONLY_AT_BEGINNING,
-            OPTION_MINIMUM_CHARACTER_COUNT_KEY,
             OPTION_USE_TAB_KEY
         ])
         .then(result => {
@@ -48,15 +45,6 @@ updateShopifyTags().then(() => {
             } else {
                 matchOnlyAtBeginning = result[OPTION_MATCH_ONLY_AT_BEGINNING]
             }
-
-            if (result[OPTION_MINIMUM_CHARACTER_COUNT_KEY] === undefined) {
-                browser.storage.local.set({
-                    [OPTION_MINIMUM_CHARACTER_COUNT_KEY]: 0
-                })
-            } else {
-                minimumCharacterCount =
-                    result[OPTION_MINIMUM_CHARACTER_COUNT_KEY]
-            }
         })
 })
 
@@ -75,11 +63,6 @@ browser.storage.onChanged.addListener((changes, areaName) => {
 
     if (changes[OPTION_MATCH_ONLY_AT_BEGINNING]) {
         matchOnlyAtBeginning = changes[OPTION_MATCH_ONLY_AT_BEGINNING].newValue
-    }
-
-    if (changes[OPTION_MINIMUM_CHARACTER_COUNT_KEY]) {
-        minimumCharacterCount =
-            changes[OPTION_MINIMUM_CHARACTER_COUNT_KEY].newValue
     }
 
     if (autocompleteEnabled) {
@@ -109,7 +92,7 @@ function sendOptions (tabId, frameId) {
         {
             itemList: itemStringToList(itemString),
             useTabToChooseItems,
-            minimumCharacterCount,
+            minimumCharacterCount: 0,
             matchOnlyAtBeginning
         },
         options

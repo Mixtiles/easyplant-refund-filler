@@ -1,31 +1,42 @@
 .ui-helper-hidden-accessible {
-    display: none;
+  display: none;
 }
 .ui-menu.ui-widget.ui-widget-content.ui-autocomplete.simple-form-fill {
-    margin: 0 !important;
-    min-width: 200px;
-    overflow: hidden;
-    position: absolute;
-    z-index: 999999999;
+  margin: 0 !important;
+  min-width: 200px;
+  overflow: hidden;
+  position: absolute;
+  z-index: 999999999;
+  background-color: red;
 }
-.ui-menu.ui-widget.ui-widget-content.ui-autocomplete.simple-form-fill .ui-menu-item {
-    cursor: pointer;
-    list-style: none;
-    margin: auto;
-    padding: 0 !important;
+.ui-menu.ui-widget.ui-widget-content.ui-autocomplete.simple-form-fill
+  .ui-menu-item {
+  cursor: pointer;
+  list-style: none;
+  margin: auto;
+  padding: 0 !important;
 }
-.ui-menu.ui-widget.ui-widget-content.ui-autocomplete.simple-form-fill .ui-menu-item .ui-menu-item-wrapper {
-    border: none;
-    padding: 3px 1em 3px 0.4em;
+.ui-menu.ui-widget.ui-widget-content.ui-autocomplete.simple-form-fill
+  .ui-menu-item
+  .ui-menu-item-wrapper {
+  border: none;
+  padding: 3px 1em 3px 0.4em;
 }
-.ui-menu.ui-widget.ui-widget-content.ui-autocomplete.simple-form-fill .ui-menu-item .ui-menu-item-wrapper.ui-state-active {
-    background: #007fff;
-    color: #FFFFFF;
-    margin: 0;
+.ui-menu.ui-widget.ui-widget-content.ui-autocomplete.simple-form-fill
+  .ui-menu-item
+  .ui-menu-item-wrapper.ui-state-active {
+  background: #47634e;
+  color: #ffffff;
+  margin: 0;
 }
-.ui-menu.ui-widget.ui-widget-content.ui-autocomplete.simple-form-fill .ui-menu-item .ui-menu-item-wrapper.comment {
-    color: #AAAAAA;
+.ui-menu.ui-widget.ui-widget-content.ui-autocomplete.simple-form-fill
+  .ui-menu-item
+  .ui-menu-item-wrapper.comment {
+  color: #aaaaaa;
 }
-.ui-menu.ui-widget.ui-widget-content.ui-autocomplete.simple-form-fill .ui-menu-item .ui-menu-item-wrapper.ui-state-active .comment {
-    color: #FFFFFF;
+.ui-menu.ui-widget.ui-widget-content.ui-autocomplete.simple-form-fill
+  .ui-menu-item
+  .ui-menu-item-wrapper.ui-state-active
+  .comment {
+  color: #ffffff;
 }

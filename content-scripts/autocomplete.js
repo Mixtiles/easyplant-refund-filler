@@ -1,5 +1,7 @@
 'use strict'
 
+const REFUND_INPUT_ID = 'RefundReasonCardReason'
+
 function addAutoCompleteToInputs (message) {
     if (!message.itemList) {
         return
@@ -7,6 +9,8 @@ function addAutoCompleteToInputs (message) {
 
     // getInputs() defined in checker.js
     for (const input of getInputs()) {
+        if (input.id !== REFUND_INPUT_ID) continue
+
         //  eslint-disable-line no-undef
         const jQueryInput = $(input)
         jQueryInput.attr('autocomplete', 'on')
@@ -15,51 +19,48 @@ function addAutoCompleteToInputs (message) {
             jQueryInput.keydown(keydownWrapper(jQueryInput))
         }
 
-        jQueryInput
-            .autocomplete({
-                source: sourceWrapper(
-                    message.itemList,
-                    message.matchOnlyAtBeginning
-                ),
-                // custom select to prevent reset of value after choosing item
-                select: function (_event, { item }) {
-                    jQueryInput.val(item.value)
-                    const detail = {
-                        simpleFormFillCustomInputEvent: true
-                    }
-                    input.dispatchEvent(new CustomEvent('input', { detail }))
-                    return false
-                },
-                // custom search to prevent autocomplete from re-opening
-                search: function (event, _ui) {
-                    let originalEvent = event
-                    while (originalEvent.originalEvent) {
-                        originalEvent = originalEvent.originalEvent
-                    }
-                    const detail = originalEvent.detail
-                    if (detail && detail.simpleFormFillCustomInputEvent) {
-                        return false
-                    }
-                    return true
-                },
-                autoFocus: false,
-                delay: 100,
-                minLength: message.minimumCharacterCount,
-                classes: {
-                    'ui-autocomplete': 'simple-form-fill'
+        jQueryInput.autocomplete({
+            source: sourceWrapper(
+                message.itemList,
+                message.matchOnlyAtBeginning
+            ),
+            // custom select to prevent reset of value after choosing item
+            select: function (_event, { item }) {
+                jQueryInput.val(item.value)
+                const detail = {
+                    simpleFormFillCustomInputEvent: true
                 }
-            })
-            .focus(function () {
-                // We would like the autocomplete to automatically open when clicking on the input.
-                // If the input is blank, we "trick" the autocomplete to show all tags by searching for '/'
-                $(this)
-                    .data('uiAutocomplete')
-                    .search($(this).val() || '/')
-            })
+                input.dispatchEvent(new CustomEvent('input', { detail }))
+                return false
+            },
+            // custom search to prevent autocomplete from re-opening
+            search: function (event, _ui) {
+                let originalEvent = event
+                while (originalEvent.originalEvent) {
+                    originalEvent = originalEvent.originalEvent
+                }
+                const { detail } = originalEvent
+                console.log(detail)
+                if (detail && detail.simpleFormFillCustomInputEvent) {
+                    return false
+                }
+                return true
+            },
+            autoFocus: false,
+            delay: 100,
+            minLength: 0,
+            classes: {
+                'ui-autocomplete': 'simple-form-fill'
+            }
+        })
 
         jQueryInput.data('ui-autocomplete')._resizeMenu = function () {
             this.menu.element.css('cssText', getCSS(jQueryInput))
             this.menu.element.outerWidth(jQueryInput.outerWidth())
+            this.menu.element.outerHeight(200)
+            this.menu.element.css({ overflowY: 'scroll' })
+
+            console.log('element', this.menu.element)
         }
 
         jQueryInput.data('ui-autocomplete')._renderItem = function (ul, item) {
@@ -141,6 +142,7 @@ function keydownWrapper (jQueryInput) {
 
 function getCSS (jQueryInput) {
     let backgroundColor = jQueryInput.css('background-color')
+    console.log('backgroundColor', backgroundColor)
     const color = jQueryInput.css('color')
 
     let borderColor = jQueryInput.css('border-bottom-color')

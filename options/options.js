@@ -1,13 +1,10 @@
 const OPTION_AUTOCOMPLETE_KEY = "autocompleteEnabled";
 const OPTION_ITEMS_KEY = "items";
 const OPTION_MATCH_ONLY_AT_BEGINNING = "matchOnlyAtBeginning";
-const OPTION_MINIMUM_CHARACTER_COUNT_KEY = "minimumCharacterCount";
 const OPTION_USE_TAB_KEY = "useTabToChooseItems";
 const ELEMENT_AUTOCOMPLETE_ENABLED = "autocomplete-enabled";
 const ELEMENT_ITEMS = "items";
 const ELEMENT_MATCH_ONLY_AT_BEGINNING = "match-only-at-beginning";
-const ELEMENT_MINIMUM_CHARACTER_COUNT = "minimum-character-count";
-const ELEMENT_SYNC_ITEMS = "sync-items-enabled";
 const ELEMENT_USE_TAB_TO_CHOOSE_ITEMS = "use-tab-to-choose-items";
 
 let timeout;
@@ -17,7 +14,6 @@ function restoreOptions() {
         OPTION_AUTOCOMPLETE_KEY,
         OPTION_ITEMS_KEY,
         OPTION_MATCH_ONLY_AT_BEGINNING,
-        OPTION_MINIMUM_CHARACTER_COUNT_KEY,
         OPTION_USE_TAB_KEY,
     ]).then(
         result => {
@@ -25,7 +21,6 @@ function restoreOptions() {
             setBooleanValue(ELEMENT_MATCH_ONLY_AT_BEGINNING, result[OPTION_MATCH_ONLY_AT_BEGINNING]);
             setBooleanValue(ELEMENT_USE_TAB_TO_CHOOSE_ITEMS, result[OPTION_USE_TAB_KEY]);
             setTextValue(ELEMENT_ITEMS, result[OPTION_ITEMS_KEY]);
-            setTextValue(ELEMENT_MINIMUM_CHARACTER_COUNT, result[OPTION_MINIMUM_CHARACTER_COUNT_KEY]);
         }
     );
 }
@@ -62,7 +57,6 @@ function saveOptions(event) {
         [OPTION_AUTOCOMPLETE_KEY]: document.querySelector(`#${ELEMENT_AUTOCOMPLETE_ENABLED}`).checked,
         [OPTION_ITEMS_KEY]: document.querySelector(`#${ELEMENT_ITEMS}`).value,
         [OPTION_MATCH_ONLY_AT_BEGINNING]: document.querySelector(`#${ELEMENT_MATCH_ONLY_AT_BEGINNING}`).checked,
-        [OPTION_MINIMUM_CHARACTER_COUNT_KEY]: parseInt(document.querySelector(`#${ELEMENT_MINIMUM_CHARACTER_COUNT}`).value),
         [OPTION_USE_TAB_KEY]: document.querySelector(`#${ELEMENT_USE_TAB_TO_CHOOSE_ITEMS}`).checked,
     });
 }
