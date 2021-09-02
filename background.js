@@ -11,7 +11,6 @@ const OPTION_AUTOCOMPLETE_KEY = 'autocompleteEnabled'
 const OPTION_ITEMS_KEY = 'items'
 const OPTION_MATCH_ONLY_AT_BEGINNING = 'matchOnlyAtBeginning'
 const OPTION_MINIMUM_CHARACTER_COUNT_KEY = 'minimumCharacterCount'
-const OPTION_SYNC_ITEMS = 'syncItems'
 const OPTION_USE_TAB_KEY = 'useTabToChooseItems'
 
 let autocompleteEnabled
@@ -27,7 +26,6 @@ updateShopifyTags().then(() => {
             OPTION_AUTOCOMPLETE_KEY,
             OPTION_MATCH_ONLY_AT_BEGINNING,
             OPTION_MINIMUM_CHARACTER_COUNT_KEY,
-            OPTION_SYNC_ITEMS,
             OPTION_USE_TAB_KEY
         ])
         .then(result => {
@@ -59,32 +57,12 @@ updateShopifyTags().then(() => {
                 minimumCharacterCount =
                     result[OPTION_MINIMUM_CHARACTER_COUNT_KEY]
             }
-
-            if (result[OPTION_SYNC_ITEMS] === undefined) {
-                browser.storage.local.set({ [OPTION_SYNC_ITEMS]: false })
-            } else {
-                syncItems = result[OPTION_SYNC_ITEMS]
-            }
         })
 })
 
 browser.storage.onChanged.addListener((changes, areaName) => {
-    let initTriggered = false
-    if (changes[OPTION_SYNC_ITEMS]) {
-        const previousValue = syncItems
-        const newValue = changes[OPTION_SYNC_ITEMS].newValue
-        syncItems = newValue
-        if (previousValue !== newValue && syncItems) {
-            initTriggered = true
-            initSyncItems()
-        }
-    }
-
     if (changes[OPTION_ITEMS_KEY]) {
         itemString = changes[OPTION_ITEMS_KEY].newValue
-        if (!initTriggered) {
-            maybeSyncItems(areaName, itemString)
-        }
     }
 
     if (changes[OPTION_AUTOCOMPLETE_KEY]) {
@@ -277,40 +255,6 @@ function enableDisableAutocomplete (enable) {
         browser.tabs.onActivated.removeListener(sendOptionsToActiveTab)
         autocompleteEnabled = false
     }
-}
-
-function initSyncItems () {
-    Promise.all([
-        browser.storage.local.get(OPTION_ITEMS_KEY),
-        browser.storage.sync.get(OPTION_ITEMS_KEY)
-    ]).then(([localResult, remoteResult]) => {
-        const localValue = localResult[OPTION_ITEMS_KEY]
-        const remoteValue = remoteResult[OPTION_ITEMS_KEY]
-        const newValue = util.mergeItemString(localValue, remoteValue)
-
-        if (JSON.stringify(localValue) != JSON.stringify(newValue)) {
-            browser.storage.local.set({ [OPTION_ITEMS_KEY]: newValue })
-        }
-        if (JSON.stringify(remoteValue) != JSON.stringify(newValue)) {
-            browser.storage.sync.set({ [OPTION_ITEMS_KEY]: newValue })
-        }
-    })
-}
-
-function maybeSyncItems (changedArea, itemString) {
-    if (!syncItems) {
-        return
-    }
-
-    const toAreaName = changedArea === 'local' ? 'sync' : 'local'
-    const toArea = browser.storage[toAreaName]
-
-    toArea.get([OPTION_ITEMS_KEY]).then(result => {
-        const targetItemString = result[OPTION_ITEMS_KEY]
-        if (targetItemString !== itemString) {
-            toArea.set({ [OPTION_ITEMS_KEY]: itemString })
-        }
-    })
 }
 
 function chainPromises (functions) {
