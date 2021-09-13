@@ -40,7 +40,7 @@ function addAutoCompleteToInputs (message) {
                     originalEvent = originalEvent.originalEvent
                 }
                 const { detail } = originalEvent
-                console.log(detail)
+
                 if (detail && detail.simpleFormFillCustomInputEvent) {
                     return false
                 }
