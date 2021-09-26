@@ -1,7 +1,5 @@
 'use strict'
 
-const REFUND_INPUT_ID = 'RefundReasonCardReason'
-
 function addAutoCompleteToInputs (message) {
     if (!message.itemList) {
         return
@@ -9,10 +7,10 @@ function addAutoCompleteToInputs (message) {
 
     // getInputs() defined in checker.js
     for (const input of getInputs()) {
-        if (input.id !== REFUND_INPUT_ID) continue
-
         //  eslint-disable-line no-undef
         const jQueryInput = $(input)
+        if (jQueryInput.attr('placeholder') === 'Search') continue
+
         jQueryInput.attr('autocomplete', 'on')
 
         if (message.useTabToChooseItems) {

@@ -1,5 +1,5 @@
 {
-  "author": "Sebastian Blask",
+  "author": "Ron Hagafny",
   "devDependencies": {
     "eslint": "7.31.x",
     "tape": "5.2.x",
@@ -31,5 +31,5 @@
     "test": "web-ext lint && tape $(find . -not -path '*node_modules*' -name 'test-*.js')"
   },
   "title": "Easyplant Refund Filler",
-  "version": "2.2.3"
+  "version": "2.2.4"
 }

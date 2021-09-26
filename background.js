@@ -48,7 +48,7 @@ updateShopifyTags().then(() => {
         })
 })
 
-browser.storage.onChanged.addListener((changes, areaName) => {
+browser.storage.onChanged.addListener(changes => {
     if (changes[OPTION_ITEMS_KEY]) {
         itemString = changes[OPTION_ITEMS_KEY].newValue
     }
@@ -128,7 +128,6 @@ function setOptionItems (optionItems) {
                 browser.storage.local.set({
                     [OPTION_ITEMS_KEY]: optionItems
                 })
-                itemString = tags
             } else {
                 itemString = itemStringFromCache
             }
